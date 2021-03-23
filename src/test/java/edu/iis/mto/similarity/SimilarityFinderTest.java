@@ -76,10 +76,10 @@ class SimilarityFinderTest {
         int[] seq1 = {};
         int[] seq2 = {};
         similarityFinder.calculateJackardSimilarity(seq1, seq2);
-        Field searchInvocationCountField = mocksequenceSearcher.getClass().getDeclaredField("anInt");
-        searchInvocationCountField.setAccessible(true);
-        int numberOfSearchInvocations = searchInvocationCountField.getInt(mocksequenceSearcher);
-        assertEquals(expectedValue, numberOfSearchInvocations);
+        Field field = mocksequenceSearcher.getClass().getDeclaredField("anInt");
+        field.setAccessible(true);
+        int result = field.getInt(mocksequenceSearcher);
+        assertEquals(expectedValue, result);
     }
     @Test
     void searchMethodDo5Times() throws NoSuchFieldException, IllegalAccessException {
@@ -98,10 +98,10 @@ class SimilarityFinderTest {
         int[] seq2 = {1,2,3,4};
 
         similarityFinder.calculateJackardSimilarity(seq1, seq2);
-        Field searchInvocationCountField = mocksequenceSearcher.getClass().getDeclaredField("anInt");
-        searchInvocationCountField.setAccessible(true);
-        int numberOfSearchInvocations = searchInvocationCountField.getInt(mocksequenceSearcher);
-        assertEquals(expectedValue, numberOfSearchInvocations);
+        Field field = mocksequenceSearcher.getClass().getDeclaredField("anInt");
+        field.setAccessible(true);
+        int result = field.getInt(mocksequenceSearcher);
+        assertEquals(expectedValue, result);
     }
     @Test
     void searchMethodDoFourTimes() throws NoSuchFieldException, IllegalAccessException {
@@ -119,10 +119,10 @@ class SimilarityFinderTest {
         int[] seq1 = {6,7,8,9};
         int[] seq2 = {1,2,3,4};
         similarityFinder.calculateJackardSimilarity(seq1, seq2);
-        Field searchInvocationCountField = mocksequenceSearcher.getClass().getDeclaredField("anInt");
-        searchInvocationCountField.setAccessible(true);
-        int numberOfSearchInvocations = searchInvocationCountField.getInt(mocksequenceSearcher);
-        assertEquals(expectedValue, numberOfSearchInvocations);
+        Field field = mocksequenceSearcher.getClass().getDeclaredField("anInt");
+        field.setAccessible(true);
+        int result = field.getInt(mocksequenceSearcher);
+        assertEquals(expectedValue, result);
     }
 
 }
