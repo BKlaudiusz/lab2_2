@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import edu.iis.mto.searcher.SearchResult;
 import edu.iis.mto.searcher.SequenceSearcher;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
+import java.lang.reflect.Field;
 
 class SimilarityFinderTest {
 
@@ -59,6 +59,70 @@ class SimilarityFinderTest {
         int[] seq1 = {};
         int[] seq2 = {};
         assertEquals(1, similarityFinder.calculateJackardSimilarity(seq1, seq2));
+    }
+    @Test
+    void searchMethodDo0Times() throws NoSuchFieldException, IllegalAccessException {
+
+        int expectedValue = 0;
+        SequenceSearcher mocksequenceSearcher = new SequenceSearcher() {
+            private int anInt = 0;
+            @Override
+            public SearchResult search(int elem, int[] sequence) {
+                anInt++;
+                return null;
+            }
+        };
+        SimilarityFinder similarityFinder = new SimilarityFinder(mocksequenceSearcher);
+        int[] seq1 = {};
+        int[] seq2 = {};
+        similarityFinder.calculateJackardSimilarity(seq1, seq2);
+        Field searchInvocationCountField = mocksequenceSearcher.getClass().getDeclaredField("anInt");
+        searchInvocationCountField.setAccessible(true);
+        int numberOfSearchInvocations = searchInvocationCountField.getInt(mocksequenceSearcher);
+        assertEquals(expectedValue, numberOfSearchInvocations);
+    }
+    @Test
+    void searchMethodDo5Times() throws NoSuchFieldException, IllegalAccessException {
+
+        int expectedValue = 4;
+        SequenceSearcher mocksequenceSearcher = new SequenceSearcher() {
+            private int anInt = 0;
+            @Override
+            public SearchResult search(int elem, int[] sequence) {
+                anInt++;
+                return SearchResult.builder().withFound(true).withPosition(elem).build();
+            }
+        };
+        SimilarityFinder similarityFinder = new SimilarityFinder(mocksequenceSearcher);
+        int[] seq1 = {1,2,3,4};
+        int[] seq2 = {1,2,3,4};
+
+        similarityFinder.calculateJackardSimilarity(seq1, seq2);
+        Field searchInvocationCountField = mocksequenceSearcher.getClass().getDeclaredField("anInt");
+        searchInvocationCountField.setAccessible(true);
+        int numberOfSearchInvocations = searchInvocationCountField.getInt(mocksequenceSearcher);
+        assertEquals(expectedValue, numberOfSearchInvocations);
+    }
+    @Test
+    void searchMethodDoFourTimes() throws NoSuchFieldException, IllegalAccessException {
+
+        int expectedValue = 4;
+        SequenceSearcher mocksequenceSearcher = new SequenceSearcher() {
+            private int anInt = 0;
+            @Override
+            public SearchResult search(int elem, int[] sequence) {
+                anInt++;
+                return SearchResult.builder().withFound(false).withPosition(-1).build();
+            }
+        };
+        SimilarityFinder similarityFinder = new SimilarityFinder(mocksequenceSearcher);
+        int[] seq1 = {6,7,8,9};
+        int[] seq2 = {1,2,3,4};
+        similarityFinder.calculateJackardSimilarity(seq1, seq2);
+        Field searchInvocationCountField = mocksequenceSearcher.getClass().getDeclaredField("anInt");
+        searchInvocationCountField.setAccessible(true);
+        int numberOfSearchInvocations = searchInvocationCountField.getInt(mocksequenceSearcher);
+        assertEquals(expectedValue, numberOfSearchInvocations);
     }
 
 }
